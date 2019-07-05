@@ -3,13 +3,13 @@ query Domains(
   $owner: String
   $description: String
   $tags: [KeyValueInput!]
-) {
+){
   domains(
     name: $name
     owner: $owner
     description: $description
     tags: $tags
-  ) {
+  ){
     name
     owner
     description
@@ -28,7 +28,7 @@ query Schemas(
   $type: String
   $configuration: [KeyValueInput!]
   $domain: String
-) {
+){
   schemas(
     name: $name
     owner: $owner
@@ -37,7 +37,7 @@ query Schemas(
     type: $type
     configuration: $configuration
     domain: $domain
-  ) {
+  ){
     name
     owner
     description
@@ -72,7 +72,7 @@ query Streams(
   $domain: String
   $version: Int
   $schema: NameDomainInput
-) {
+){
   streams(
     name: $name
     owner: $owner
@@ -83,7 +83,7 @@ query Streams(
     domain: $domain
     version: $version
     schema: $schema
-  ) {
+  ){
     name
     owner
     description
@@ -126,6 +126,254 @@ query Streams(
         tags {
           key
           value
+        }
+      }
+    }
+  }
+}
+
+query Producers(
+  $name: String
+  $owner: String
+  $description: String
+  $tags: [KeyValueInput!]
+  $type: String
+  $configuration: [KeyValueInput!]
+  $stream: [StreamInput!]
+  $zone: String
+){
+  producers(
+    name: $name
+    owner: $owner
+    description: $description
+    tags: $tags
+    type: $type
+    configuration: $configuration
+    stream: $stream
+    zone: $zone
+  ){
+    name
+    owner
+    description
+    tags {
+      key
+      value
+    }
+    type
+    configuration {
+      key
+      value
+    }
+    bindings {
+      name
+      owner
+      description
+      tags {
+        key
+        value
+      }
+      type
+      configuration {
+        key
+        value
+      }
+      stream {
+        name
+        owner
+        description
+        tags {
+          key
+          value
+        }
+        type
+        configuration {
+          key
+          value
+        }
+        domain {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+        }
+        version
+        schema {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+          type
+          configuration {
+            key
+            value
+          }
+          domain {
+            name
+            owner
+            description
+            tags {
+              key
+              value
+            }
+          }
+        }
+      }
+      infrastructure {
+        name
+        owner
+        description
+        tags {
+          key
+          value
+        }
+        type
+        configuration {
+          key
+          value
+        }
+        zone {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+          type
+          configuration {
+            key
+            value
+          }
+        }
+      }
+    }
+  }
+}
+
+query Consumers(
+  $name: String
+  $owner: String
+  $description: String
+  $tags: [KeyValueInput!]
+  $type: String
+  $configuration: [KeyValueInput!]
+  $stream: [StreamInput!]
+  $zone: String
+){
+  consumers(
+    name: $name
+    owner: $owner
+    description: $description
+    tags: $tags
+    type: $type
+    configuration: $configuration
+    stream: $stream
+    zone: $zone
+  ){
+    name
+    owner
+    description
+    tags {
+      key
+      value
+    }
+    type
+    configuration {
+      key
+      value
+    }
+    bindings {
+      name
+      owner
+      description
+      tags {
+        key
+        value
+      }
+      type
+      configuration {
+        key
+        value
+      }
+      stream {
+        name
+        owner
+        description
+        tags {
+          key
+          value
+        }
+        type
+        configuration {
+          key
+          value
+        }
+        domain {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+        }
+        version
+        schema {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+          type
+          configuration {
+            key
+            value
+          }
+          domain {
+            name
+            owner
+            description
+            tags {
+              key
+              value
+            }
+          }
+        }
+      }
+      infrastructure {
+        name
+        owner
+        description
+        tags {
+          key
+          value
+        }
+        type
+        configuration {
+          key
+          value
+        }
+        zone {
+          name
+          owner
+          description
+          tags {
+            key
+            value
+          }
+          type
+          configuration {
+            key
+            value
+          }
         }
       }
     }
@@ -181,5 +429,45 @@ mutation Stream (
     domain: $domain
     version: $version
     schema: $schema
+  )
+}
+
+mutation Producer (
+  $name: String!
+  $description: String!
+  $tags: [KeyValueInput!]!
+  $type: String!
+  $configuration: [KeyValueInput!]!
+  $stream: StreamInput!
+  $zone: String!
+){
+  upsertProducer(
+    name: $name
+    description: $description
+    tags: $tags
+    type: $type
+    configuration: $configuration
+    stream: $stream
+    zone: $zone
+  )
+}
+
+mutation Consumer (
+  $name: String!
+  $description: String!
+  $tags: [KeyValueInput!]!
+  $type: String!
+  $configuration: [KeyValueInput!]!
+  $stream: StreamInput!
+  $zone: String!
+){
+  upsertConsumer(
+    name: $name
+    description: $description
+    tags: $tags
+    type: $type
+    configuration: $configuration
+    stream: $stream
+    zone: $zone
   )
 }

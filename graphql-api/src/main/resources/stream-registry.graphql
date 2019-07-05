@@ -32,6 +32,56 @@ type Stream {
   schema: Schema!
 }
 
+type Zone {
+  name: String!
+  owner: String!
+  description: String!
+  tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
+}
+
+type Infrastructure {
+  name: String!
+  owner: String!
+  description: String!
+  tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
+  zone: Zone!
+}
+
+type StreamBinding {
+  name: String!
+  owner: String!
+  description: String!
+  tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
+  stream: Stream!
+  infrastructure: Infrastructure!
+}
+
+type Producer {
+  name: String!
+  owner: String!
+  description: String!
+  tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
+  bindings: [StreamBinding!]!
+}
+
+type Consumer {
+  name: String!
+  owner: String!
+  description: String!
+  tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
+  bindings: [StreamBinding!]!
+}
+
 input KeyValueInput {
   key: String
   value: String
@@ -40,6 +90,12 @@ input KeyValueInput {
 input NameDomainInput {
   name: String
   domain: String
+}
+
+input StreamInput {
+  domain: String!
+  name: String!
+  version: Int!
 }
 
 type Query {
@@ -69,6 +125,26 @@ type Query {
     version: Int
     schema: NameDomainInput
   ): [Stream!]!
+  producers(
+    name: String
+    owner: String
+    description: String
+    tags: [KeyValueInput!]
+    type: String!
+    configuration: [KeyValueInput!]
+    stream: StreamInput
+    zone: String
+  ): [Producer!]!
+  consumers(
+    name: String
+    owner: String
+    description: String
+    tags: [KeyValueInput!]
+    type: String!
+    configuration: [KeyValueInput!]
+    stream: StreamInput
+    zone: String
+  ): [Consumer!]!
 }
 
 type Mutation {
@@ -94,5 +170,23 @@ type Mutation {
     domain: String!
     version: Int!
     schema: NameDomainInput!
+  ): Boolean!
+  upsertProducer(
+    name: String!
+    description: String!
+    tags: [KeyValueInput!]!
+    type: String!
+    configuration: [KeyValueInput!]!
+    stream: StreamInput!
+    zone: String!
+  ): Boolean!
+  upsertConsumer(
+    name: String!
+    description: String!
+    tags: [KeyValueInput!]!
+    type: String!
+    configuration: [KeyValueInput!]!
+    stream: StreamInput!
+    zone: String!
   ): Boolean!
 }
