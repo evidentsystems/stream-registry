@@ -139,7 +139,7 @@ query Producers(
   $tags: [KeyValueInput!]
   $type: String
   $configuration: [KeyValueInput!]
-  $stream: [StreamInput!]
+  $stream: StreamInput
   $zone: String
 ){
   producers(
@@ -263,7 +263,7 @@ query Consumers(
   $tags: [KeyValueInput!]
   $type: String
   $configuration: [KeyValueInput!]
-  $stream: [StreamInput!]
+  $stream: StreamInput
   $zone: String
 ){
   consumers(

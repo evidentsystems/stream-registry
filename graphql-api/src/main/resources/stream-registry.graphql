@@ -93,9 +93,9 @@ input NameDomainInput {
 }
 
 input StreamInput {
-  domain: String!
-  name: String!
-  version: Int!
+  domain: String
+  name: String
+  version: Int
 }
 
 type Query {
@@ -130,7 +130,7 @@ type Query {
     owner: String
     description: String
     tags: [KeyValueInput!]
-    type: String!
+    type: String
     configuration: [KeyValueInput!]
     stream: StreamInput
     zone: String
@@ -140,7 +140,7 @@ type Query {
     owner: String
     description: String
     tags: [KeyValueInput!]
-    type: String!
+    type: String
     configuration: [KeyValueInput!]
     stream: StreamInput
     zone: String
