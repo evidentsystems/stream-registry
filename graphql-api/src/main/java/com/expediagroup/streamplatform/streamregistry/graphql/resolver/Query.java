@@ -22,14 +22,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-
 import org.springframework.stereotype.Component;
 
+import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLConsumer;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLDomain;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLKeyValue;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLNameDomain;
+import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLProducer;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLSchema;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLStream;
+import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLStreamInput;
 import com.expediagroup.streamplatform.streamregistry.model.Domain;
 import com.expediagroup.streamplatform.streamregistry.model.Schema;
 import com.expediagroup.streamplatform.streamregistry.model.Stream;
@@ -115,6 +117,32 @@ public class Query implements GraphQLQueryResolver {
           );
         })
         .collect(toList());
+  }
+
+  public List<GraphQLProducer> producers(
+      String name,
+      String owner,
+      String description,
+      Iterable<GraphQLKeyValue> tags,
+      String type,
+      Iterable<GraphQLKeyValue> configuration,
+      GraphQLStreamInput stream,
+      String zone) {
+    // TODO implement
+    throw new UnsupportedOperationException("Not yet implemented.");
+  }
+
+  public List<GraphQLConsumer> consumers(
+      String name,
+      String owner,
+      String description,
+      Iterable<GraphQLKeyValue> tags,
+      String type,
+      Iterable<GraphQLKeyValue> configuration,
+      GraphQLStreamInput stream,
+      String zone) {
+    // TODO implement
+    throw new UnsupportedOperationException("Not yet implemented.");
   }
 
   private Domain domain(String name) {

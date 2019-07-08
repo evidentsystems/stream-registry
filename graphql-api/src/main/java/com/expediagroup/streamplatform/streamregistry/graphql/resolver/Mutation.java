@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLKeyValue;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLNameDomain;
+import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLStreamInput;
 import com.expediagroup.streamplatform.streamregistry.model.Domain;
 import com.expediagroup.streamplatform.streamregistry.model.Schema;
 import com.expediagroup.streamplatform.streamregistry.model.Stream;
@@ -97,5 +98,29 @@ public class Mutation implements GraphQLMutationResolver {
             .build()
     );
     return true;
+  }
+
+  public boolean upsertProducer(
+      String name,
+      String description,
+      Iterable<GraphQLKeyValue> tags,
+      String type,
+      Iterable<GraphQLKeyValue> configuration,
+      GraphQLStreamInput stream,
+      String zone) {
+    // TODO implement
+    throw new UnsupportedOperationException("Not yet implemented.");
+  }
+
+  public boolean upsertConsumer(
+      String name,
+      String description,
+      Iterable<GraphQLKeyValue> tags,
+      String type,
+      Iterable<GraphQLKeyValue> configuration,
+      GraphQLStreamInput stream,
+      String zone) {
+    // TODO implement
+    throw new UnsupportedOperationException("Not yet implemented.");
   }
 }
