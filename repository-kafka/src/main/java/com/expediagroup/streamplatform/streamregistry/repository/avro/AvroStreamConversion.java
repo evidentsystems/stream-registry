@@ -15,71 +15,49 @@
  */
 package com.expediagroup.streamplatform.streamregistry.repository.avro;
 
+
 import org.springframework.stereotype.Component;
 
 import com.expediagroup.streamplatform.streamregistry.model.Stream;
 
 @Component
 public class AvroStreamConversion implements Conversion<Stream, Stream.Key, AvroStream> {
-  static AvroKey key(String name, String domain, Integer version) {
+  public static AvroKey avroKey(Stream.Key key) {
     return AvroKey
         .newBuilder()
-        .setId(Integer.toString(version))
+        .setId(Integer.toString(key.getVersion()))
         .setType(AvroKeyType.STREAM_VERSION)
         .setParent(AvroKey
             .newBuilder()
-            .setId(name)
+            .setId(key.getName())
             .setType(AvroKeyType.STREAM)
-            .setParent(AvroDomainConversion.key(domain))
+            .setParent(AvroDomainConversion.avroKey(key.getDomain()))
             .build())
         .build();
   }
 
-  @Override
-  public AvroKey key(Stream stream) {
-    return key(stream.getName(), stream.getDomain(), stream.getVersion());
+  public static Stream.Key modelKey(AvroKey key) {
+    return Stream.Key
+        .builder()
+        .name(key.getParent().getId())
+        .domain(AvroDomainConversion.modelKey(key.getParent().getParent()))
+        .version(Integer.parseInt(key.getId()))
+        .build();
   }
 
   @Override
   public AvroKey key(Stream.Key key) {
-    return key(key.getName(), key.getDomain(), key.getVersion());
-  }
-
-  @Override
-  public AvroStream toAvro(Stream stream) {
-    return AvroStream
-        .newBuilder()
-        .setName(stream.getName())
-        .setOwner(stream.getOwner())
-        .setDescription(stream.getDescription())
-        .setTags(stream.getTags())
-        .setType(stream.getType())
-        .setConfiguration(stream.getConfiguration())
-        .setDomain(stream.getDomain())
-        .setVersion(stream.getVersion())
-        .setSchemaRef(AvroNameDomains.fromDto(stream.getSchema()))
-        .build();
-  }
-
-  @Override
-  public Stream toEntity(AvroStream stream) {
-    return Stream
-        .builder()
-        .name(stream.getName())
-        .owner(stream.getOwner())
-        .description(stream.getDescription())
-        .tags(stream.getTags())
-        .type(stream.getType())
-        .configuration(stream.getConfiguration())
-        .domain(stream.getDomain())
-        .version(stream.getVersion())
-        .schema(AvroNameDomains.toDto(stream.getSchemaRef()))
-        .build();
+    return avroKey(key);
   }
 
   @Override
   public Class<AvroStream> avroClass() {
     return AvroStream.class;
+  }
+
+  @Override
+  public Class<Stream> entityClass() {
+    return Stream.class;
   }
 
   @Override

@@ -8,6 +8,8 @@ type Domain {
   owner: String!
   description: String!
   tags: [KeyValue!]!
+  type: String!
+  configuration: [KeyValue!]!
 }
 
 type Schema {
@@ -82,20 +84,36 @@ type Consumer {
   bindings: [StreamBinding!]!
 }
 
-input KeyValueInput {
+input KeyValueQueryInput {
   key: String
   value: String
 }
 
-input NameDomainInput {
+input KeyValueInput {
+  key: String!
+  value: String!
+}
+
+input SchemaKeyQueryInput {
   name: String
   domain: String
 }
 
-input StreamInput {
+input StreamQueryInput {
   domain: String
   name: String
   version: Int
+}
+
+input StreamInput {
+  domain: String!
+  name: String!
+  version: Int!
+}
+
+input SchemaKeyInput {
+  name: String!
+  domain: String!
 }
 
 type Query {
@@ -103,46 +121,48 @@ type Query {
     name: String
     owner: String
     description: String
-    tags: [KeyValueInput!]
+    tags: [KeyValueQueryInput!]
+    type: String
+    configuration: [KeyValueQueryInput!]
   ): [Domain!]!
   schemas(
     name: String
     owner: String
     description: String
-    tags: [KeyValueInput!]
+    tags: [KeyValueQueryInput!]
     type: String
-    configuration: [KeyValueInput!]
+    configuration: [KeyValueQueryInput!]
     domain: String
   ): [Schema!]!
   streams(
     name: String
     owner: String
     description: String
-    tags: [KeyValueInput!]
+    tags: [KeyValueQueryInput!]
     type: String
-    configuration: [KeyValueInput!]
+    configuration: [KeyValueQueryInput!]
     domain: String
     version: Int
-    schema: NameDomainInput
+    schema: SchemaKeyQueryInput
   ): [Stream!]!
   producers(
     name: String
     owner: String
     description: String
-    tags: [KeyValueInput!]
+    tags: [KeyValueQueryInput!]
     type: String
-    configuration: [KeyValueInput!]
-    stream: StreamInput
+    configuration: [KeyValueQueryInput!]
+    stream: StreamQueryInput
     zone: String
   ): [Producer!]!
   consumers(
     name: String
     owner: String
     description: String
-    tags: [KeyValueInput!]
+    tags: [KeyValueQueryInput!]
     type: String
-    configuration: [KeyValueInput!]
-    stream: StreamInput
+    configuration: [KeyValueQueryInput!]
+    stream: StreamQueryInput
     zone: String
   ): [Consumer!]!
 }
@@ -152,6 +172,8 @@ type Mutation {
     name: String!
     description: String!
     tags: [KeyValueInput!]!
+    type: String!
+    configuration: [KeyValueInput!]!
   ): Boolean!
   upsertSchema(
     name: String!
@@ -169,7 +191,7 @@ type Mutation {
     configuration: [KeyValueInput!]!
     domain: String!
     version: Int!
-    schema: NameDomainInput!
+    schema: SchemaKeyInput!
   ): Boolean!
   upsertProducer(
     name: String!

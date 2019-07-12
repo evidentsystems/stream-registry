@@ -15,10 +15,10 @@
  */
 package com.expediagroup.streamplatform.streamregistry.graphql.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Value;
-
-import com.expediagroup.streamplatform.streamregistry.model.Domain;
 
 @Value
 @Builder
@@ -26,15 +26,7 @@ public class GraphQLDomain {
   String name;
   String owner;
   String description;
-  Iterable<GraphQLKeyValue> tags;
-
-  public static GraphQLDomain fromDto(Domain domain) {
-    return GraphQLDomain
-        .builder()
-        .name(domain.getName())
-        .owner(domain.getOwner())
-        .description(domain.getDescription())
-        .tags(GraphQLKeyValue.fromDto(domain.getTags()))
-        .build();
-  }
+  List<GraphQLKeyValue> tags;
+  String type;
+  List<GraphQLKeyValue> configuration;
 }

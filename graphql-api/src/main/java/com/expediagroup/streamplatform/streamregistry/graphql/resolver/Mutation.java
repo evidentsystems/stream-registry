@@ -15,6 +15,8 @@
  */
 package com.expediagroup.streamplatform.streamregistry.graphql.resolver;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
@@ -22,7 +24,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import org.springframework.stereotype.Component;
 
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLKeyValue;
-import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLNameDomain;
+import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLSchema;
 import com.expediagroup.streamplatform.streamregistry.graphql.model.GraphQLStreamInput;
 import com.expediagroup.streamplatform.streamregistry.model.Domain;
 import com.expediagroup.streamplatform.streamregistry.model.Schema;
@@ -39,14 +41,18 @@ public class Mutation implements GraphQLMutationResolver {
   public boolean upsertDomain(
       String name,
       String description,
-      Iterable<GraphQLKeyValue> tags) {
+      List<GraphQLKeyValue> tags,
+      String type,
+      List<GraphQLKeyValue> configuration) {
     domainService.upsert(
         Domain
             .builder()
             .name(name)
             .owner("root") //TODO inject user
             .description(description)
-            .tags(GraphQLKeyValue.toDto(tags))
+            .tags(GraphQLKeyValue.toList(tags))
+            .type(type)
+            .configuration(GraphQLKeyValue.toList(configuration))
             .build()
     );
     return true;
@@ -55,9 +61,9 @@ public class Mutation implements GraphQLMutationResolver {
   public boolean upsertSchema(
       String name,
       String description,
-      Iterable<GraphQLKeyValue> tags,
+      List<GraphQLKeyValue> tags,
       String type,
-      Iterable<GraphQLKeyValue> configuration,
+      List<GraphQLKeyValue> configuration,
       String domain) {
     schemaService.upsert(
         Schema
@@ -65,10 +71,13 @@ public class Mutation implements GraphQLMutationResolver {
             .name(name)
             .owner("root") //TODO inject user
             .description(description)
-            .tags(GraphQLKeyValue.toDto(tags))
+            .tags(GraphQLKeyValue.toList(tags))
             .type(type)
-            .configuration(GraphQLKeyValue.toDto(configuration))
-            .domain(domain)
+            .configuration(GraphQLKeyValue.toList(configuration))
+            .domain(Domain.Key
+                .builder()
+                .name(domain)
+                .build())
             .build()
     );
     return true;
@@ -77,24 +86,34 @@ public class Mutation implements GraphQLMutationResolver {
   public boolean upsertStream(
       String name,
       String description,
-      Iterable<GraphQLKeyValue> tags,
+      List<GraphQLKeyValue> tags,
       String type,
-      Iterable<GraphQLKeyValue> configuration,
+      List<GraphQLKeyValue> configuration,
       String domain,
       Integer version,
-      GraphQLNameDomain schema) {
+      GraphQLSchema.Key schema) {
     streamService.upsert(
         Stream
             .builder()
             .name(name)
             .owner("root") //TODO inject user
             .description(description)
-            .tags(GraphQLKeyValue.toDto(tags))
+            .tags(GraphQLKeyValue.toList(tags))
             .type(type)
-            .configuration(GraphQLKeyValue.toDto(configuration))
-            .domain(domain)
+            .configuration(GraphQLKeyValue.toList(configuration))
+            .domain(Domain.Key
+                .builder()
+                .name(domain)
+                .build())
             .version(version)
-            .schema(GraphQLNameDomain.toDto(schema))
+            .schema(Schema.Key
+                .builder()
+                .domain(Domain.Key
+                    .builder()
+                    .name(schema.getDomain())
+                    .build())
+                .name(schema.getName())
+                .build())
             .build()
     );
     return true;
@@ -103,9 +122,9 @@ public class Mutation implements GraphQLMutationResolver {
   public boolean upsertProducer(
       String name,
       String description,
-      Iterable<GraphQLKeyValue> tags,
+      List<GraphQLKeyValue> tags,
       String type,
-      Iterable<GraphQLKeyValue> configuration,
+      List<GraphQLKeyValue> configuration,
       GraphQLStreamInput stream,
       String zone) {
     // TODO implement
@@ -115,9 +134,9 @@ public class Mutation implements GraphQLMutationResolver {
   public boolean upsertConsumer(
       String name,
       String description,
-      Iterable<GraphQLKeyValue> tags,
+      List<GraphQLKeyValue> tags,
       String type,
-      Iterable<GraphQLKeyValue> configuration,
+      List<GraphQLKeyValue> configuration,
       GraphQLStreamInput stream,
       String zone) {
     // TODO implement

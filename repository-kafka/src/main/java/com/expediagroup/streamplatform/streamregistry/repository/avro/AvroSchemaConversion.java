@@ -21,56 +21,36 @@ import com.expediagroup.streamplatform.streamregistry.model.Schema;
 
 @Component
 public class AvroSchemaConversion implements Conversion<Schema, Schema.Key, AvroSchema> {
-  static AvroKey key(String name, String domain) {
+  public static AvroKey avroKey(Schema.Key key) {
     return AvroKey
         .newBuilder()
-        .setId(name)
+        .setId(key.getName())
         .setType(AvroKeyType.SCHEMA)
-        .setParent(AvroDomainConversion.key(domain))
+        .setParent(AvroDomainConversion.avroKey(key.getDomain()))
         .build();
   }
 
-  @Override
-  public AvroKey key(Schema schema) {
-    return key(schema.getName(), schema.getDomain());
+  public static Schema.Key modelKey(AvroKey key) {
+    return Schema.Key
+        .builder()
+        .name(key.getId())
+        .domain(AvroDomainConversion.modelKey(key.getParent()))
+        .build();
   }
 
   @Override
   public AvroKey key(Schema.Key key) {
-    return key(key.getName(), key.getDomain());
-  }
-
-  @Override
-  public AvroSchema toAvro(Schema schema) {
-    return AvroSchema
-        .newBuilder()
-        .setName(schema.getName())
-        .setOwner(schema.getOwner())
-        .setDescription(schema.getDescription())
-        .setTags(schema.getTags())
-        .setType(schema.getType())
-        .setConfiguration(schema.getConfiguration())
-        .setDomain(schema.getDomain())
-        .build();
-  }
-
-  @Override
-  public Schema toEntity(AvroSchema schema) {
-    return Schema
-        .builder()
-        .name(schema.getName())
-        .owner(schema.getOwner())
-        .description(schema.getDescription())
-        .tags(schema.getTags())
-        .type(schema.getType())
-        .configuration(schema.getConfiguration())
-        .domain(schema.getDomain())
-        .build();
+    return avroKey(key);
   }
 
   @Override
   public Class<AvroSchema> avroClass() {
     return AvroSchema.class;
+  }
+
+  @Override
+  public Class<Schema> entityClass() {
+    return Schema.class;
   }
 
   @Override

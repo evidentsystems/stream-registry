@@ -21,50 +21,35 @@ import com.expediagroup.streamplatform.streamregistry.model.Domain;
 
 @Component
 public class AvroDomainConversion implements Conversion<Domain, Domain.Key, AvroDomain> {
-  static AvroKey key(String domain) {
+  public static AvroKey avroKey(Domain.Key key) {
     return AvroKey
         .newBuilder()
-        .setId(domain)
+        .setId(key.getName())
         .setType(AvroKeyType.DOMAIN)
         .setParent(null)
         .build();
   }
 
-  @Override
-  public AvroKey key(Domain domain) {
-    return key(domain.getName());
+  public static Domain.Key modelKey(AvroKey key) {
+    return Domain.Key
+        .builder()
+        .name(key.getId())
+        .build();
   }
 
   @Override
   public AvroKey key(Domain.Key key) {
-    return key(key.getName());
-  }
-
-  @Override
-  public AvroDomain toAvro(Domain domain) {
-    return AvroDomain
-        .newBuilder()
-        .setName(domain.getName())
-        .setOwner(domain.getOwner())
-        .setDescription(domain.getDescription())
-        .setTags(domain.getTags())
-        .build();
-  }
-
-  @Override
-  public Domain toEntity(AvroDomain domain) {
-    return Domain
-        .builder()
-        .name(domain.getName())
-        .owner(domain.getOwner())
-        .description(domain.getDescription())
-        .tags(domain.getTags())
-        .build();
+    return avroKey(key);
   }
 
   @Override
   public Class<AvroDomain> avroClass() {
     return AvroDomain.class;
+  }
+
+  @Override
+  public Class<Domain> entityClass() {
+    return Domain.class;
   }
 
   @Override
