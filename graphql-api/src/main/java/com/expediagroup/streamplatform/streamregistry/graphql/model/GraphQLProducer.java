@@ -15,6 +15,8 @@
  */
 package com.expediagroup.streamplatform.streamregistry.graphql.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -25,8 +27,8 @@ public class GraphQLProducer {
   String name;
   String owner;
   String description;
-  Iterable<GraphQLKeyValue> tags;
+  List<GraphQLKeyValue> tags;
   String type;
-  Iterable<GraphQLKeyValue> configuration;
-  Iterable<GraphQLStreamBinding> bindings;
+  List<GraphQLKeyValue> configuration;
+  List<GraphQLStreamBinding> bindings;
 }
