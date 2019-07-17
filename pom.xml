@@ -233,9 +233,9 @@
           </execution>
         </executions>
         <configuration>
-          <header>file://${project.build.directory}/plugin-config/mycila/APACHE-2.txt</header>
+          <header>${project.build.directory}\plugin-config\mycila\APACHE-2.txt</header>
           <headerDefinitions>
-            <headerDefinition>file://${project.build.directory}/plugin-config/mycila/hotels-definitions.xml</headerDefinition>
+            <headerDefinition>${project.build.directory}\plugin-config\mycila\hotels-definitions.xml</headerDefinition>
           </headerDefinitions>
           <properties>
             <owner>Expedia, Inc.</owner>

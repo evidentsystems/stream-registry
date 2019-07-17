@@ -9,22 +9,22 @@ STREAM_REGISTRY_DEBUG_OPTS = $(STREAM_REGISTRY_JAVA_OPTS) --add-opens java.base/
 .PHONY: clean tests build build-docker run debug all just-deploy deploy ci-setup ci-deploy
 
 clean:
-	./mvnw clean
+	./mvnw.cmd clean
 
 tests:
-	./mvnw clean test -B
+	./mvnw.cmd clean test -B
 
 build:
-	./mvnw clean install -B
+	./mvnw.cmd clean install -B
 
 build-docker:
-	./mvnw -Pdocker clean package -B
+	./mvnw.cmd -Pdocker clean package -B
 
 run:
-	MAVEN_OPTS="$(STREAM_REGISTRY_JAVA_OPTS)" ./mvnw exec:java
+	MAVEN_OPTS="$(STREAM_REGISTRY_JAVA_OPTS)" ./mvnw.cmd exec:java
 
 debug:
-	MAVEN_OPTS="$(STREAM_REGISTRY_DEBUG_OPTS)" ./mvnw exec:java
+	MAVEN_OPTS="$(STREAM_REGISTRY_DEBUG_OPTS)" ./mvnw.cmd exec:java
 
 all: build
 
